@@ -12,9 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import java.util.Date;
 
 public class AddClassActivity extends AppCompatActivity {
     ActionBar actionBar;
@@ -42,10 +39,10 @@ public class AddClassActivity extends AppCompatActivity {
         edit_startTime = findViewById(R.id.edit_startTime);
         edit_endTime = findViewById(R.id.edit_endTime);
         edit_onlineLink = findViewById(R.id.edit_onlineLink);
-        edit_remark = findViewById(R.id.edit_remark);
+        edit_remark = findViewById(R.id.edit_remarkText);
         btn_choiceStartTime = findViewById(R.id.btn_choiceStartTime);
         btn_choiceEndTime = findViewById(R.id.btn_choiceEndTime);
-        spinner_weekDay = findViewById(R.id.spinner_weekDay);
+        spinner_weekDay = findViewById(R.id.spinner_weekOfDay);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.weekdays,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
