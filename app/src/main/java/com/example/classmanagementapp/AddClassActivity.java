@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.example.classmanagementapp.Database.RoomDB;
+import com.example.classmanagementapp.Models.CClass;
 
 public class AddClassActivity extends AppCompatActivity {
     ActionBar actionBar;
@@ -19,6 +23,7 @@ public class AddClassActivity extends AppCompatActivity {
             edit_startTime, edit_endTime, edit_onlineLink, edit_remark;
     Button btn_choiceStartTime, btn_choiceEndTime, btn_classAdd;
     Spinner spinner_weekDay;
+    RoomDB database;
     Time startTime, endTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +50,30 @@ public class AddClassActivity extends AppCompatActivity {
         spinner_weekDay = findViewById(R.id.spinner_weekOfDay);
         btn_classAdd = findViewById(R.id.btn_classAdd);
 
+        database = RoomDB.getInstance(AddClassActivity.this);
+
+        edit_startTime.setFocusable(false);
+        edit_endTime.setFocusable(false);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.weekdays,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
         spinner_weekDay.setAdapter(adapter);
+
+        btn_choiceStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ここにタイムピッカーから取得した値をフォーマットしてから
+                // edit_startTimeに表示させる処理を書く
+            }
+        });
+
+        btn_choiceEndTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ここにタイムピッカーから取得した値をフォーマットしてから
+                // edit_endTimeに表示させる処理を書く
+            }
+        });
 
         spinner_weekDay.setOnItemSelectedListener(spinnerListener);
 
@@ -64,6 +90,28 @@ public class AddClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // データベースに追加する処理
+                String subjectName = edit_subjectName.getText().toString();
+                String teacherName = edit_teacherName.getText().toString();
+                String roomName = edit_roomName.getText().toString();
+                String weekOfDay = spinner_weekDay.getSelectedItem().toString();
+                String onlineLink = edit_onlineLink.getText().toString();
+                String remarkText = edit_remark.getText().toString();
+                String startTime = edit_startTime.getText().toString();
+                String endTime = edit_endTime.getText().toString();
+
+                Log.d("MyLog", subjectName);
+                Log.d("MyLog", teacherName);
+                Log.d("MyLog", roomName);
+                Log.d("MyLog", weekOfDay);
+                Log.d("MyLog", String.valueOf(onlineLink.length()));
+                if(subjectName.equals("") || teacherName.equals("") || roomName.equals("") || weekOfDay.equals("")
+                || onlineLink.equals("") || startTime.equals("") || endTime.equals("")) {
+                    Toast.makeText(AddClassActivity.this, "備考以外の項目すべてに入力してください", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                CClass newClass = new CClass(subjectName, teacherName, roomName, weekOfDay, onlineLink,
+                        remarkText, startTime, endTime);
+                database.mainDAO().insert(newClass);
             }
         });
     }

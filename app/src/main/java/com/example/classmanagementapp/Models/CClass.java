@@ -1,11 +1,13 @@
 package com.example.classmanagementapp.Models;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity(tableName = "classes")
 public class CClass implements Serializable {
 //    private String subjectName, teacherName, roomName,
 //            weekOfDay, onlineLink, remarkText;

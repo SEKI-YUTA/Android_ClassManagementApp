@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String DAY_NAME = "日付";
     private ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
+    private int defaultPageNum;
     public SimpleDateFormat dateFormat = new SimpleDateFormat("MM月dd日");
     public String[] weekDaysEn;
     public Date now;
@@ -35,16 +36,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         viewPager = findViewById(R.id.pager);
-        pagerAdapter = new ScreenSlidePagerAdapter(this);
-        viewPager.setAdapter(pagerAdapter);
         weekDaysEn = getResources().getStringArray(R.array.weekdaysEn);
 
         now = new Date();
         String nowDay = new SimpleDateFormat("E").format(now);
         Log.d("MyLog", nowDay);
-        int defaultPageNum = Arrays.asList(weekDaysEn).indexOf(nowDay);
+        defaultPageNum = Arrays.asList(weekDaysEn).indexOf(nowDay);
         Log.d("MyLog", "default page index should be " + defaultPageNum);
+        pagerAdapter = new ScreenSlidePagerAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(defaultPageNum, false);
+            }
+        });
 
     }
 
