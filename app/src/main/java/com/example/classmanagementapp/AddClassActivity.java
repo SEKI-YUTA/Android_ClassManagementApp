@@ -17,7 +17,7 @@ public class AddClassActivity extends AppCompatActivity {
     ActionBar actionBar;
     EditText edit_subjectName, edit_teacherName, edit_roomName,
             edit_startTime, edit_endTime, edit_onlineLink, edit_remark;
-    Button btn_choiceStartTime, btn_choiceEndTime;
+    Button btn_choiceStartTime, btn_choiceEndTime, btn_classAdd;
     Spinner spinner_weekDay;
     Time startTime, endTime;
     @Override
@@ -43,6 +43,7 @@ public class AddClassActivity extends AppCompatActivity {
         btn_choiceStartTime = findViewById(R.id.btn_choiceStartTime);
         btn_choiceEndTime = findViewById(R.id.btn_choiceEndTime);
         spinner_weekDay = findViewById(R.id.spinner_weekOfDay);
+        btn_classAdd = findViewById(R.id.btn_classAdd);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.weekdays,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
@@ -58,6 +59,13 @@ public class AddClassActivity extends AppCompatActivity {
             }
         });
         // ここまで
+
+        btn_classAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // データベースに追加する処理
+            }
+        });
     }
 
     // 曜日選択のスピナーを選択したときの処理

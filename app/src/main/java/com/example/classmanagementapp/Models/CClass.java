@@ -31,13 +31,13 @@ public class CClass implements Serializable {
     String remarkText;
 
     @ColumnInfo(name = "startTime")
-    Date startTime;
+    String startTime;
 
     @ColumnInfo(name = "endTime")
-    Date endTime;
+    String endTime;
 
     public CClass(String subjectName, String teacherName, String roomName, String weekOfDay,
-                  String onlineLink, String remarkText, Date startTime, Date endTime) {
+                  String onlineLink, String remarkText, String startTime, String endTime) {
         this.subjectName = subjectName;
         this.teacherName = teacherName;
         this.roomName = roomName;
@@ -104,19 +104,19 @@ public class CClass implements Serializable {
         this.remarkText = remarkText;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 }

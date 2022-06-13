@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.classmanagementapp.Adapters.CClassAdapter;
 import com.example.classmanagementapp.Models.CClass;
+import com.example.classmanagementapp.Utils.EnumWeekDays;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,14 +34,15 @@ public class DayClassPageFragment extends Fragment {
 
         Bundle args = getArguments();
         String weekOfDay = args.getString("曜日");
-        tv_class_page_date.setText("曜日: " + weekOfDay);
+        String dayName = args.getString("日付");
+        tv_class_page_date.setText(dayName);
 
         CClass demoItem1 = new CClass("グローバルビジネス論", "古谷　賢一", "0302",
-                "月曜日", "https://meet.google.com/wde-oyvb-avt?pli=1&authuser=2",
-                "", new Date(), new Date());
+                EnumWeekDays.Monday.getWeekDay(), "https://meet.google.com/wde-oyvb-avt?pli=1&authuser=2",
+                "", "12:50", "14:20");
         CClass demoItem2 = new CClass("流通システム論", "藤岡芳郎", "5302",
-                "木曜日", "https://meet.google.com/wde-oyvb-avt?pli=1&authuser=2",
-                "", new Date(), new Date());
+                EnumWeekDays.Thursday.getWeekDay(), "https://meet.google.com/wde-oyvb-avt?pli=1&authuser=2",
+                "", "10:40", "14:20");
         List<CClass> demoDataAll = new ArrayList<>();
         List<CClass> demoData = new ArrayList<>();
         demoDataAll.add(demoItem1);

@@ -1,6 +1,6 @@
 package com.example.classmanagementapp.Utils;
 
-public enum EnumWeekOfDay {
+public enum EnumWeekDays {
     Monday("月曜日"),
     Tuesday("火曜日"),
     Wednesday("水曜日"),
@@ -9,11 +9,11 @@ public enum EnumWeekOfDay {
     Saturday("土曜日"),
     Sunday("日曜日");
     private String day;
-    private EnumWeekOfDay(String day) {
+    private EnumWeekDays(String day) {
         this.day = day;
     }
 
-    public String getWeekOfDay() {
+    public String getWeekDay() {
         return this.day;
     }
 }
