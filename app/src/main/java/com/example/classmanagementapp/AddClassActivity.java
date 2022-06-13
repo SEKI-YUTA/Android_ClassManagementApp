@@ -2,7 +2,9 @@ package com.example.classmanagementapp;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.classmanagementapp.Database.RoomDB;
@@ -64,6 +67,8 @@ public class AddClassActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // ここにタイムピッカーから取得した値をフォーマットしてから
                 // edit_startTimeに表示させる処理を書く
+                DialogFragment newFragment = new TimePick(edit_startTime);
+                newFragment.show(getSupportFragmentManager(), "timePicker");
             }
         });
 
@@ -72,6 +77,8 @@ public class AddClassActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // ここにタイムピッカーから取得した値をフォーマットしてから
                 // edit_endTimeに表示させる処理を書く
+                DialogFragment newFragment = new TimePick(edit_endTime);
+                newFragment.show(getSupportFragmentManager(), "timePicker");
             }
         });
 
@@ -105,8 +112,8 @@ public class AddClassActivity extends AppCompatActivity {
                 Log.d("MyLog", weekOfDay);
                 Log.d("MyLog", String.valueOf(onlineLink.length()));
                 if(subjectName.equals("") || teacherName.equals("") || roomName.equals("") || weekOfDay.equals("")
-                || onlineLink.equals("") || startTime.equals("") || endTime.equals("")) {
-                    Toast.makeText(AddClassActivity.this, "備考以外の項目すべてに入力してください", Toast.LENGTH_SHORT).show();
+                || startTime.equals("") || endTime.equals("")) {
+                    Toast.makeText(AddClassActivity.this, "備考と授業リンク以外の項目すべてに入力してください", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 CClass newClass = new CClass(subjectName, teacherName, roomName, weekOfDay, onlineLink,

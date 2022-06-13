@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(defaultPageNum, false);
             }
         });
+        viewPager.setPageTransformer(new DepthPageTransformer());
 
     }
 
