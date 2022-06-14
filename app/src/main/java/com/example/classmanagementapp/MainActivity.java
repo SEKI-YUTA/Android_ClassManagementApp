@@ -78,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MyLog", "onActivityResult on MainActivity");
         dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
         pagerAdapter.notifyDataSetChanged();
+        Log.d("MyLog", String.valueOf(dataAll.size()));
+        Intent selfIntent = new Intent(this, MainActivity.class);
+        selfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(selfIntent);
 //        int currentPage = viewPager.getCurrentItem();
 //        if(currentPage==0) {
 //            viewPager.setCurrentItem(NUM_PAGES - 1);
@@ -132,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBindViewHolder(holder, position, payloads);
             // ここに現在のフラグメントのIdを書き換える処理を書く
 //            DayClassPageFragment fragment = getFragmentManager().findFragmentByTag("f" + position);
-
+            // MainActivity自体を再起動させる事でデータ更新が反映されない問題を解決
         }
 
         @NonNull

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
@@ -119,6 +120,9 @@ public class AddClassActivity extends AppCompatActivity {
                 CClass newClass = new CClass(subjectName, teacherName, roomName, weekOfDay, onlineLink,
                         remarkText, startTime, endTime);
                 database.mainDAO().insert(newClass);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
