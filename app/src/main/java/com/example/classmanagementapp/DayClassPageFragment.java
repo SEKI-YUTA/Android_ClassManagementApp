@@ -69,7 +69,7 @@ public class DayClassPageFragment extends Fragment {
     private final OnClassSelectedListener listener = new OnClassSelectedListener() {
         @Override
         public void onClassSelected(CClass cClass) {
-            Intent intent = new Intent(getContext(), ClassDetailActivity.class);
+            Intent intent = new Intent(getContext(), CClassDetailActivity.class);
             intent.putExtra(EnumConstantValues.ONE_CCLASS_KEY.getConstantString(), cClass);
             startActivityForResult(intent, 102);
         }

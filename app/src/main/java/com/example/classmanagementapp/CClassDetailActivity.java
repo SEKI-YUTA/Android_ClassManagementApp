@@ -17,7 +17,7 @@ import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 
-public class ClassDetailActivity extends AppCompatActivity {
+public class CClassDetailActivity extends AppCompatActivity {
     TextView tv_classTime,tv_subjectName, tv_teacherName, tv_roomName, tv_onlineLink,tv_remarkText;
     ImageButton imgBtn_delete;
     AlertDialog.Builder alertDialogBuilder;
@@ -26,7 +26,7 @@ public class ClassDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_detail);
+        setContentView(R.layout.activity_cclass_detail);
 
         // アクションバーをカスタム
         actionbar = getSupportActionBar();
@@ -62,24 +62,24 @@ public class ClassDetailActivity extends AppCompatActivity {
         imgBtn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialogBuilder = new AlertDialog.Builder(ClassDetailActivity.this);
+                alertDialogBuilder = new AlertDialog.Builder(CClassDetailActivity.this);
                 alertDialogBuilder.setMessage((ccLass.getWeekOfDay() +"  " +  ccLass.getStartTime() + "~" + ccLass.getEndTime() + "の授業を本当に削除しますか？"));
 
-                alertDialogBuilder.setPositiveButton("はい", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        RoomDB database = RoomDB.getInstance(ClassDetailActivity.this);
-                database.mainDAO().delete(ccLass);
-                        Toast.makeText(ClassDetailActivity.this, "削除しました。", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent();
-                        setResult(Activity.RESULT_OK, intent);
-                        finish();
-                    }
-                });
                 alertDialogBuilder.setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(ClassDetailActivity.this, "削除をキャンセルしました。", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CClassDetailActivity.this, "削除をキャンセルしました。", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                alertDialogBuilder.setPositiveButton("はい", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        RoomDB database = RoomDB.getInstance(CClassDetailActivity.this);
+                        database.mainDAO().delete(ccLass);
+                        Toast.makeText(CClassDetailActivity.this, "削除しました。", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent();
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
                     }
                 });
                 alertDialogBuilder.create();
