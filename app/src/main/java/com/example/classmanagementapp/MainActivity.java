@@ -145,47 +145,48 @@ public class MainActivity extends AppCompatActivity {
         public Fragment createFragment(int position) {
             Bundle args = new Bundle();
             DayClassPageFragment fragment = new DayClassPageFragment();
-
+            // 変数名的にややこしいが同じ処理で出る数字が欲しいため使う
+            int dateOffset = defaultPageNum;
             switch (position) {
                 case 0:
                     args.putString(DAY_OF_WEEK, EnumWeekDays.Monday.getWeekDay()); // フラグメント側でフィルタをかけるのに必要
-                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * position)) + " " + EnumWeekDays.Monday.getWeekDay());
+                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Monday.getWeekDay());
                     args.putSerializable("dataAll", dataAll);
                     fragment.setArguments(args);
                     return fragment;
                 case 1:
                     args.putString(DAY_OF_WEEK, EnumWeekDays.Tuesday.getWeekDay());
-                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * position)) + " " + EnumWeekDays.Tuesday.getWeekDay());
+                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Tuesday.getWeekDay());
                     args.putSerializable("dataAll", dataAll);
                     fragment.setArguments(args);
                     return fragment;
                 case 2:
                     args.putString(DAY_OF_WEEK, EnumWeekDays.Wednesday.getWeekDay());
-                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * position)) + " " + EnumWeekDays.Wednesday.getWeekDay());
+                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Wednesday.getWeekDay());
                     args.putSerializable("dataAll", dataAll);
                     fragment.setArguments(args);
                     return fragment;
                 case 3:
                     args.putString(DAY_OF_WEEK, EnumWeekDays.Thursday.getWeekDay());
-                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * position)) + " " + EnumWeekDays.Thursday.getWeekDay());
+                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Thursday.getWeekDay());
                     args.putSerializable("dataAll", dataAll);
                     fragment.setArguments(args);
                     return fragment;
                 case 4:
                     args.putString(DAY_OF_WEEK, EnumWeekDays.Friday.getWeekDay());
-                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * position)) + " " + EnumWeekDays.Friday.getWeekDay());
+                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Friday.getWeekDay());
                     args.putSerializable("dataAll", dataAll);
                     fragment.setArguments(args);
                     return fragment;
                 case 5:
                     args.putString(DAY_OF_WEEK, EnumWeekDays.Saturday.getWeekDay());
-                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * position)) + " " + EnumWeekDays.Saturday.getWeekDay());
+                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Saturday.getWeekDay());
                     args.putSerializable("dataAll", dataAll);
                     fragment.setArguments(args);
                     return fragment;
                 case 6:
                     args.putString(DAY_OF_WEEK, EnumWeekDays.Sunday.getWeekDay());
-                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * position)) + " " + EnumWeekDays.Sunday.getWeekDay());
+                    args.putString(DAY_NAME, dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Sunday.getWeekDay());
                     args.putSerializable("dataAll", dataAll);
                     fragment.setArguments(args);
                     return fragment;

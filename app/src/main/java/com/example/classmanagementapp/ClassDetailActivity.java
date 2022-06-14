@@ -1,5 +1,6 @@
 package com.example.classmanagementapp;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,11 +21,27 @@ public class ClassDetailActivity extends AppCompatActivity {
     TextView tv_classTime,tv_subjectName, tv_teacherName, tv_roomName, tv_onlineLink,tv_remarkText;
     ImageButton imgBtn_delete;
     AlertDialog.Builder alertDialogBuilder;
+    ActionBar actionbar;
+    ImageButton customAppbar_goBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_detail);
         Log.d("MyLog", "onCreate on ClassDetail");
+
+        // アクションバーをカスタム
+        actionbar = getSupportActionBar();
+        actionbar.setDisplayShowTitleEnabled(false);
+        actionbar.setDisplayShowCustomEnabled(true);
+        actionbar.setCustomView(R.layout.custom_appbar1);
+        customAppbar_goBack = findViewById(R.id.customAppbar_goBack);
+        customAppbar_goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        // ここまで
 
         tv_classTime = findViewById(R.id.tv_classTime);
         tv_subjectName = findViewById(R.id.tv_subjectName);
