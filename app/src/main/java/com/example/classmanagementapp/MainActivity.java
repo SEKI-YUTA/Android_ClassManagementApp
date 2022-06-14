@@ -22,11 +22,14 @@ import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 import com.example.classmanagementapp.Utils.EnumWeekDays;
 
+import java.lang.reflect.Array;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private RoomDB database;
@@ -53,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
         weekDaysEn = getResources().getStringArray(R.array.weekdaysEn);
 
         now = new Date();
-        String nowDay = new SimpleDateFormat("E").format(now);
+        // 端末の設定言語によって曜日の表示が異なるため英語で固定する
+        DateFormatSymbols dfs = DateFormatSymbols.getInstance(Locale.ENGLISH);
+        String nowDay = new SimpleDateFormat("E",dfs).format(now);
         defaultPageNum = Arrays.asList(weekDaysEn).indexOf(nowDay);
         pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
@@ -126,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
             DayClassPageFragment fragment = new DayClassPageFragment();
             // 変数名的にややこしいが同じ処理で出る数字が欲しいため使う
             int dateOffset = defaultPageNum;
+            Log.d("defaultPageNum", String.valueOf(dateOffset));
             switch (position) {
                 case 0:
                     args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Monday.getWeekDay()); // フラグメント側でフィルタをかけるのに必要
