@@ -1,21 +1,21 @@
 package com.example.classmanagementapp;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
+import com.example.classmanagementapp.Utils.EnumConstantValues;
 
 public class ClassDetailActivity extends AppCompatActivity {
     TextView tv_classTime,tv_subjectName, tv_teacherName, tv_roomName, tv_onlineLink,tv_remarkText;
@@ -27,7 +27,6 @@ public class ClassDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_detail);
-        Log.d("MyLog", "onCreate on ClassDetail");
 
         // アクションバーをカスタム
         actionbar = getSupportActionBar();
@@ -51,7 +50,7 @@ public class ClassDetailActivity extends AppCompatActivity {
         tv_remarkText = findViewById(R.id.tv_remarkText);
         imgBtn_delete = findViewById(R.id.imgBtn_delete);
 
-        CClass ccLass = (CClass) getIntent().getSerializableExtra("data");
+        CClass ccLass = (CClass) getIntent().getSerializableExtra(EnumConstantValues.ONE_CCLASS_KEY.getConstantString());
 
         tv_classTime.setText(ccLass.getWeekOfDay() +"  " +  ccLass.getStartTime() + "~" + ccLass.getEndTime());
         tv_subjectName.setText(ccLass.getSubjectName());

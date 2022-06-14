@@ -1,22 +1,18 @@
 package com.example.classmanagementapp;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.Time;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
@@ -28,7 +24,7 @@ public class AddClassActivity extends AppCompatActivity {
     Button btn_choiceStartTime, btn_choiceEndTime, btn_classAdd;
     Spinner spinner_weekDay;
     RoomDB database;
-    Time startTime, endTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,13 +103,8 @@ public class AddClassActivity extends AppCompatActivity {
                 String startTime = edit_startTime.getText().toString();
                 String endTime = edit_endTime.getText().toString();
 
-                Log.d("MyLog", subjectName);
-                Log.d("MyLog", teacherName);
-                Log.d("MyLog", roomName);
-                Log.d("MyLog", weekOfDay);
-                Log.d("MyLog", String.valueOf(onlineLink.length()));
-                if(subjectName.equals("") || teacherName.equals("") || roomName.equals("") || weekOfDay.equals("")
-                || startTime.equals("") || endTime.equals("")) {
+                if (subjectName.equals("") || teacherName.equals("") || roomName.equals("") || weekOfDay.equals("")
+                        || startTime.equals("") || endTime.equals("")) {
                     Toast.makeText(AddClassActivity.this, "備考と授業リンク以外の項目すべてに入力してください", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -132,7 +123,6 @@ public class AddClassActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             String[] weekDays = getResources().getStringArray(R.array.weekdays);
-            Log.d("MyLog", weekDays[i]);
         }
 
         @Override
