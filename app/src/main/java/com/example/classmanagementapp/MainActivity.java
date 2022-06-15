@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,10 +18,11 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
+import com.example.classmanagementapp.Transformer.DepthPageTransformer;
+import com.example.classmanagementapp.Transformer.ZoomOutPageTransformer;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 import com.example.classmanagementapp.Utils.EnumWeekDays;
 
-import java.lang.reflect.Array;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(defaultPageNum, false);
             }
         });
-        viewPager.setPageTransformer(new DepthPageTransformer());
+        viewPager.setPageTransformer(new ZoomOutPageTransformer());
 
     }
 
