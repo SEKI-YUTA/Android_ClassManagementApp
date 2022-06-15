@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         private void setUpFragmentArgs(Bundle args, int position, int dateOffset) {
             String[] weekDays = getResources().getStringArray(R.array.weekdays);
-            args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Monday.getWeekDay()); // フラグメント側でフィルタをかけるのに必要
+            args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), weekDays[position]); // フラグメント側でフィルタをかけるのに必要
             args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + weekDays[position]);
             args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
         }

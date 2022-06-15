@@ -2,6 +2,7 @@ package com.example.classmanagementapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,7 @@ import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 
 import java.util.Arrays;
+import java.util.Date;
 
 public class AddClassActivity extends AppCompatActivity {
     private ActionBar actionBar;
@@ -101,7 +103,12 @@ public class AddClassActivity extends AppCompatActivity {
         btn_classAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // データベースに追加する処理
+                boolean isTimeValid;
+                Date now = new Date();
+                Date startDateTime = new Date();
+                Date endDateTime = new Date();
+
+                // データベースに追加するための下処理と追加処理
                 String subjectName = edit_subjectName.getText().toString();
                 String teacherName = edit_teacherName.getText().toString();
                 String roomName = edit_roomName.getText().toString();
@@ -111,9 +118,24 @@ public class AddClassActivity extends AppCompatActivity {
                 String startTime = edit_startTime.getText().toString();
                 String endTime = edit_endTime.getText().toString();
 
+                try {
+                    startDateTime.setHours(Integer.parseInt(startTime.split(":")[0]));
+                    startDateTime.setMinutes(Integer.parseInt(startTime.split(":")[1]));
+                    endDateTime.setHours(Integer.parseInt(endTime.split(":")[0]));
+                    endDateTime.setMinutes(Integer.parseInt(endTime.split(":")[1]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(AddClassActivity.this, "予期せぬエラーが発生しました。\nもう一度操作をしてください。", Toast.LENGTH_SHORT).show();
+                }
+                isTimeValid = endDateTime.after(startDateTime);
+
                 if (subjectName.equals("") || teacherName.equals("") || roomName.equals("") || weekOfDay.equals("")
                         || startTime.equals("") || endTime.equals("")) {
                     Toast.makeText(AddClassActivity.this, "備考と授業リンク以外の項目すべてに入力してください", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!isTimeValid) {
+                    Toast.makeText(AddClassActivity.this, "終了時間を開始時間よりも後に設定してください。", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 CClass newClass = new CClass(subjectName, teacherName, roomName, weekOfDay, onlineLink,

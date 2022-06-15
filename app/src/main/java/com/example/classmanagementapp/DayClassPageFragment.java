@@ -3,6 +3,7 @@ package com.example.classmanagementapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,9 @@ import com.example.classmanagementapp.Listeners.OnClassSelectedListener;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,13 +45,36 @@ public class DayClassPageFragment extends Fragment {
         dataAll = (List<CClass>) args.getSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString());
         tv_class_page_date.setText(dayName);
 
-        List<CClass> demoData = new ArrayList<>();
+        List<CClass> filteredData = new ArrayList<>();
         for(int i = 0; i < dataAll.size(); i++) {
             if(dataAll.get(i).getWeekOfDay().equals(weekOfDay)) {
-                demoData.add(dataAll.get(i));
+                filteredData.add(dataAll.get(i));
+                Log.d("MyLog", weekOfDay);
             }
         }
-        CClassAdapter adapter = new CClassAdapter(getContext(), demoData, listener);
+
+        // 開始時間が早い順に並び変える処理
+        for(int i = 0; i < filteredData.size() - 1; i++) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            Date date1 = new Date();
+            Date date2 = new Date();
+            date1.setHours(Integer.parseInt(filteredData.get(i).getStartTime().split(":")[0]));
+            date1.setMinutes(Integer.parseInt(filteredData.get(i).getStartTime().split(":")[1]));
+            date2.setHours(Integer.parseInt(filteredData.get(i + 1).getStartTime().split(":")[0]));
+            date2.setMinutes(Integer.parseInt(filteredData.get(i + 1).getStartTime().split(":")[1]));
+            if(date1.after(date2)) {
+                CClass tmp = filteredData.get(i);
+                Log.d("MyLog", format.format(date1));
+                Log.d("MyLog", format.format(date2));
+                filteredData.set(i, filteredData.get(i + 1));
+                filteredData.set(i + 1, tmp);
+            }
+        }
+        // ここまで
+
+
+
+        CClassAdapter adapter = new CClassAdapter(getContext(), filteredData, listener);
 
         recycler_class_list.setHasFixedSize(true);
         recycler_class_list.setLayoutManager(new GridLayoutManager(getContext(), 1));

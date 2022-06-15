@@ -40,7 +40,7 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
         holder.tv_subjectName.setText(cClass.getSubjectName());
         holder.tv_teacherName.setText(cClass.getTeacherName());
         holder.tv_roomName.setText(cClass.getRoomName());
-        holder.tv_startAndEndTime.setText(cClass.getStartTime() + "~" + cClass.getEndTime());
+        holder.tv_startAndEndTime.setText(cClass.getStartTime() + "~" + cClass.getEndTime() + " " + cClass.getWeekOfDay());
         holder.classCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
