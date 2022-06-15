@@ -1,9 +1,13 @@
 package com.example.classmanagementapp.Adapters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +49,19 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
                 listener.onClassSelected(cClass);
             }
         });
+        holder.toggleAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    // アラームをオンにする処理
+                } else {
+                    // アラームをオフにする処理
+                }
+                String message = String.format("%S %S%S%S",  cClass.getWeekOfDay(),holder.tv_startAndEndTime.getText().toString(), "の授業アラームを", b ? "ONにしました" : "OFFにしました");
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+        
     }
 
     @Override
