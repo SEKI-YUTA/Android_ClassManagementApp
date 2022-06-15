@@ -24,14 +24,9 @@ import java.util.List;
 
 
 public class DayClassPageFragment extends Fragment {
-    TextView tv_class_page_date;
-    RecyclerView recycler_class_list;
-    List<CClass> dataAll;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+    private TextView tv_class_page_date;
+    private RecyclerView recycler_class_list;
+    private List<CClass> dataAll;
 
     @Nullable
     @Override

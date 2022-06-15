@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -17,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Transformer.ZoomOutPageTransformer;
+import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 import com.example.classmanagementapp.Utils.EnumWeekDays;
 
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private RoomDB database;
     private ArrayList<CClass> dataAll;
     private ViewPager2 viewPager;
+    private ActionBar actionBar;
     private FragmentStateAdapter pagerAdapter;
     private int currentPageNum;
     private int defaultPageNum;
@@ -50,9 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
         database = RoomDB.getInstance(this);
         dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
-
         viewPager = findViewById(R.id.pager);
+        actionBar = getSupportActionBar();
         weekDaysEn = getResources().getStringArray(R.array.weekdaysEn);
+
+        // アクションバーのタイトルを消す処理
+        AppBarSetUP.hideTitle(actionBar);
 
         boolean isBacked = getIntent().getBooleanExtra(EnumConstantValues.IS_BACKED.getConstantString(), false);
         if(isBacked) {
@@ -135,45 +141,34 @@ public class MainActivity extends AppCompatActivity {
             int dateOffset = defaultPageNum;
             switch (position) {
                 case 0:
-                    args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Monday.getWeekDay()); // フラグメント側でフィルタをかけるのに必要
-                    args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Monday.getWeekDay());
-                    args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
+//                    args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Tuesday.getWeekDay());
+//                    args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Monday.getWeekDay());
+//                    args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
+                    setUpFragmentArgs(args, position, dateOffset);
                     fragment.setArguments(args);
                     return fragment;
                 case 1:
-                    args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Tuesday.getWeekDay());
-                    args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Tuesday.getWeekDay());
-                    args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
+                    setUpFragmentArgs(args, position, dateOffset);
                     fragment.setArguments(args);
                     return fragment;
                 case 2:
-                    args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Wednesday.getWeekDay());
-                    args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Wednesday.getWeekDay());
-                    args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
+                    setUpFragmentArgs(args, position, dateOffset);
                     fragment.setArguments(args);
                     return fragment;
                 case 3:
-                    args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Thursday.getWeekDay());
-                    args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Thursday.getWeekDay());
-                    args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
+                    setUpFragmentArgs(args, position, dateOffset);
                     fragment.setArguments(args);
                     return fragment;
                 case 4:
-                    args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Friday.getWeekDay());
-                    args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Friday.getWeekDay());
-                    args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
+                    setUpFragmentArgs(args, position, dateOffset);
                     fragment.setArguments(args);
                     return fragment;
                 case 5:
-                    args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Saturday.getWeekDay());
-                    args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Saturday.getWeekDay());
-                    args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
+                    setUpFragmentArgs(args, position, dateOffset);
                     fragment.setArguments(args);
                     return fragment;
                 case 6:
-                    args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Sunday.getWeekDay());
-                    args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + EnumWeekDays.Sunday.getWeekDay());
-                    args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
+                    setUpFragmentArgs(args, position, dateOffset);
                     fragment.setArguments(args);
                     return fragment;
                 default:
@@ -184,6 +179,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return EnumConstantValues.NUM_PAGES.getConstantInt();
+        }
+
+        private void setUpFragmentArgs(Bundle args, int position, int dateOffset) {
+            String[] weekDays = getResources().getStringArray(R.array.weekdays);
+            args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Monday.getWeekDay()); // フラグメント側でフィルタをかけるのに必要
+            args.putString(EnumConstantValues.DATE_KEY.getConstantString(), dateFormat.format(new Date(now.getTime() + 60 * 60 * 24 * 1000 * (position - dateOffset))) + " " + weekDays[position]);
+            args.putSerializable(EnumConstantValues.ALL_CCLASS_KEY.getConstantString(), dataAll);
         }
     }
 }

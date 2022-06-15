@@ -16,19 +16,19 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
+import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 
 import java.util.Arrays;
 
 public class AddClassActivity extends AppCompatActivity {
-    ActionBar actionBar;
-    EditText edit_subjectName, edit_teacherName, edit_roomName,
+    private ActionBar actionBar;
+    private EditText edit_subjectName, edit_teacherName, edit_roomName,
             edit_startTime, edit_endTime, edit_onlineLink, edit_remark;
-    Button btn_choiceStartTime, btn_choiceEndTime, btn_classAdd;
-    Spinner spinner_weekDay;
-    RoomDB database;
-    int viewPagerPageNum;
-    private String selectedWeekDay;
+    private Button btn_choiceStartTime, btn_choiceEndTime, btn_classAdd;
+    private Spinner spinner_weekDay;
+    private RoomDB database;
+    private int viewPagerPageNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +42,8 @@ public class AddClassActivity extends AppCompatActivity {
         }
         // アクションバーに戻るボタンを追加
         actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.custom_appbar1);
+        AppBarSetUP.hideTitle(actionBar);
+        AppBarSetUP.applyCustomLayout(actionBar, R.layout.custom_appbar1);
         // ここまで
 
         edit_subjectName = findViewById(R.id.edit_subjectName);
