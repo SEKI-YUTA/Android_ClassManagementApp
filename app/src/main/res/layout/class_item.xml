@@ -9,43 +9,56 @@
         android:layout_margin="8dp"
         android:background="@drawable/rounded_border"
         android:layout_height="wrap_content">
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/tv_startAndEndTime"
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="6">
+            <LinearLayout
+                android:layout_weight="5"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="12:50~14:20" />
+                android:orientation="vertical"
+                android:padding="8dp">
+                <TextView
+                    android:id="@+id/tv_startAndEndTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="12:50~14:20" />
 
-            <TextView
-                android:id="@+id/tv_subjectName"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_subjectName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="グローバルビジネス論"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tv_teacherName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="担当: 古谷　賢一" />
+
+                <TextView
+                    android:id="@+id/tv_roomName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="教室: 0302" />
+            </LinearLayout>
+            <Switch
+                android:id="@+id/toggleAlarm"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="グローバルビジネス論"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/tv_teacherName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="担当: 古谷　賢一" />
-
-            <TextView
-                android:id="@+id/tv_roomName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="教室: 0302" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 
