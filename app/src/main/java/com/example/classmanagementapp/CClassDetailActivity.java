@@ -1,8 +1,12 @@
 package com.example.classmanagementapp;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -22,7 +26,7 @@ public class CClassDetailActivity extends AppCompatActivity {
     ImageButton imgBtn_delete;
     AlertDialog.Builder alertDialogBuilder;
     ActionBar actionbar;
-    ImageButton customAppbar_goBack;
+    ImageButton customAppbar_goBack, imgBtn_linkCopy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,7 @@ public class CClassDetailActivity extends AppCompatActivity {
         tv_onlineLink = findViewById(R.id.tv_onlineLink);
         tv_remarkText = findViewById(R.id.tv_remarkText);
         imgBtn_delete = findViewById(R.id.imgBtn_delete);
+        imgBtn_linkCopy = findViewById(R.id.imgBtn_linkCopy);
 
         CClass ccLass = (CClass) getIntent().getSerializableExtra(EnumConstantValues.ONE_CCLASS_KEY.getConstantString());
 
@@ -86,6 +91,27 @@ public class CClassDetailActivity extends AppCompatActivity {
                 alertDialogBuilder.show();
 
 
+            }
+        });
+
+        tv_onlineLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(tv_onlineLink.getText().toString()));
+                startActivity(browserIntent);
+            }
+        });
+
+        imgBtn_linkCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 授業リンクをコピーする処理
+                ClipboardManager clipboardManager = (ClipboardManager) CClassDetailActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                if(clipboardManager == null) {
+                    return;
+                }
+                clipboardManager.setPrimaryClip(ClipData.newPlainText("", ccLass.getOnlineLink()));
+                Toast.makeText(CClassDetailActivity.this, "授業リンクをコピーしました。", Toast.LENGTH_SHORT).show();
             }
         });
 
