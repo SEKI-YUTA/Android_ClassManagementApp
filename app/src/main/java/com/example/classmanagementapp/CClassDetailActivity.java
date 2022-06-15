@@ -1,6 +1,5 @@
 package com.example.classmanagementapp;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -20,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
+import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 
 import java.util.Arrays;
@@ -27,13 +27,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CClassDetailActivity extends AppCompatActivity {
-    TextView tv_classTime,tv_subjectName, tv_teacherName, tv_roomName, tv_onlineLink,tv_remarkText;
-    ImageButton imgBtn_delete;
-    AlertDialog.Builder alertDialogBuilder;
-    ActionBar actionbar;
-    ImageButton customAppbar_goBack, imgBtn_linkCopy;
-    CClass ccLass;
-    int viewPagerOffset;
+    private TextView tv_classTime,tv_subjectName, tv_teacherName, tv_roomName, tv_onlineLink,tv_remarkText;
+    private ImageButton imgBtn_delete;
+    private AlertDialog.Builder alertDialogBuilder;
+    private ActionBar actionbar;
+    private ImageButton customAppbar_goBack, imgBtn_linkCopy;
+    private CClass ccLass;
+    private int viewPagerOffset;
+    private boolean isURLValid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,14 +51,27 @@ public class CClassDetailActivity extends AppCompatActivity {
 
         ccLass = (CClass) getIntent().getSerializableExtra(EnumConstantValues.ONE_CCLASS_KEY.getConstantString());
 
+        // URLが正式な形かをチェック
+        String url = ccLass.getOnlineLink();
+        Log.d("OnlineLink", url);
+        url = url.replace(" ", "");
+        url = url.replace("　", "");
+        Pattern pattern = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+        Matcher m = pattern.matcher(url);
+        isURLValid = m.find();
+        Log.d("MyLog", String.valueOf(isURLValid));
+        if(isURLValid) {
+            tv_onlineLink.setTextColor(getResources().getColor(R.color.sky_blue));
+        }
+        // ここまで
+
         String[] weekDays = getResources().getStringArray(R.array.weekdays);
         viewPagerOffset = Arrays.asList(weekDays).indexOf(ccLass.getWeekOfDay());
 
         // アクションバーをカスタム
         actionbar = getSupportActionBar();
-        actionbar.setDisplayShowTitleEnabled(false);
-        actionbar.setDisplayShowCustomEnabled(true);
-        actionbar.setCustomView(R.layout.custom_appbar1);
+        AppBarSetUP.hideTitle(actionbar);
+        AppBarSetUP.applyCustomLayout(actionbar, R.layout.custom_appbar1);
         customAppbar_goBack = findViewById(R.id.customAppbar_goBack);
         customAppbar_goBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,15 +119,9 @@ public class CClassDetailActivity extends AppCompatActivity {
         tv_onlineLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = tv_onlineLink.getText().toString();
-                url = url.replace(" ", "");
-                url = url.replace("　", "");
-                Log.d("MyLog", url);
-                Pattern pattern = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
-                Matcher m = pattern.matcher(url);
-                if(m.find()) {
+                if(isURLValid) {
                     Log.d("MyLog", "valid url");
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ccLass.getOnlineLink()));
                     startActivity(browserIntent);
                 }
             }
@@ -143,8 +151,8 @@ public class CClassDetailActivity extends AppCompatActivity {
 
     private void backToMain() {
         Intent intent = new Intent(CClassDetailActivity.this, MainActivity.class);
-        intent.putExtra("viewPagerOffset", viewPagerOffset);
-        intent.putExtra("isBacked", true);
+        intent.putExtra(EnumConstantValues.VIEWPAGER_OFFSET.getConstantString(), viewPagerOffset);
+        intent.putExtra(EnumConstantValues.IS_BACKED.getConstantString(), true);
         startActivity(intent);
         finish();
     }

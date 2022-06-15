@@ -1,9 +1,7 @@
 package com.example.classmanagementapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
+import com.example.classmanagementapp.Utils.EnumConstantValues;
 
 import java.util.Arrays;
 
@@ -122,7 +121,6 @@ public class AddClassActivity extends AppCompatActivity {
                         remarkText, startTime, endTime);
                 database.mainDAO().insert(newClass);
                 String[] weekDays = getResources().getStringArray(R.array.weekdays);
-                Log.d("MyLog", "weekOfDay" + newClass.getWeekOfDay());
                 int of = Arrays.asList(weekDays).indexOf(newClass.getWeekOfDay());
                 backToMain(of);
             }
@@ -150,8 +148,8 @@ public class AddClassActivity extends AppCompatActivity {
 
     private void backToMain(int of) {
         Intent intent = new Intent(AddClassActivity.this, MainActivity.class);
-        intent.putExtra("viewPagerOffset", of);
-        intent.putExtra("isBacked", true);
+        intent.putExtra(EnumConstantValues.VIEWPAGER_OFFSET.getConstantString(), of);
+        intent.putExtra(EnumConstantValues.IS_BACKED.getConstantString(), true);
         startActivity(intent);
         finish();
     }

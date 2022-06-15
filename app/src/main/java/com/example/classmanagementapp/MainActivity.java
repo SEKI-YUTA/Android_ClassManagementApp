@@ -2,13 +2,11 @@ package com.example.classmanagementapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -18,7 +16,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
-import com.example.classmanagementapp.Transformer.DepthPageTransformer;
 import com.example.classmanagementapp.Transformer.ZoomOutPageTransformer;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 import com.example.classmanagementapp.Utils.EnumWeekDays;
@@ -51,21 +48,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d("MyLog", "MainActivity onCreate");
-
         database = RoomDB.getInstance(this);
         dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
-
 
         viewPager = findViewById(R.id.pager);
         weekDaysEn = getResources().getStringArray(R.array.weekdaysEn);
 
-        boolean isBacked = getIntent().getBooleanExtra("isBacked", false);
+        boolean isBacked = getIntent().getBooleanExtra(EnumConstantValues.IS_BACKED.getConstantString(), false);
         if(isBacked) {
-            int of = getIntent().getIntExtra("viewPagerOffset", 0);
+            int of = getIntent().getIntExtra(EnumConstantValues.VIEWPAGER_OFFSET.getConstantString(), 0);
             viewPagerOffset = Integer.valueOf(of);
         }
 
+        // viewpagerの起動時に表示されるページが今の曜日になるようにページを設定している
         now = new Date();
         // 端末の設定言語によって曜日の表示が異なるため英語で固定する
         DateFormatSymbols dfs = DateFormatSymbols.getInstance(Locale.ENGLISH);
@@ -82,21 +77,12 @@ public class MainActivity extends AppCompatActivity {
                         false);
             }
         });
+        // ここまで
+
+        // ページ移動時のアニメーション
         viewPager.setPageTransformer(new ZoomOutPageTransformer());
 
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
-//        pagerAdapter.notifyDataSetChanged();
-//        viewPagerOffset = getIntent
-//        Intent selfIntent = new Intent(this, MainActivity.class);
-//        selfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        finish();
-//        startActivity(selfIntent);
-//    }
 
 
     @Override
@@ -147,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
             DayClassPageFragment fragment = new DayClassPageFragment();
             // 変数名的にややこしいが同じ処理で出る数字が欲しいため使う
             int dateOffset = defaultPageNum;
-            Log.d("defaultPageNum", String.valueOf(dateOffset));
             switch (position) {
                 case 0:
                     args.putString(EnumConstantValues.WEEKDAY_KEY.getConstantString(), EnumWeekDays.Monday.getWeekDay()); // フラグメント側でフィルタをかけるのに必要
