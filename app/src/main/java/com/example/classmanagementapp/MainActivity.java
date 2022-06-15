@@ -36,10 +36,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<CClass> dataAll;
     private ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
+    private int currentPageNum;
     private int defaultPageNum;
+    private Integer viewPagerOffset;
     public SimpleDateFormat dateFormat = new SimpleDateFormat("MM月dd日");
     public String[] weekDaysEn;
     public Date now;
+
 
 
 
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d("MyLog", "MainActivity onCreate");
+
         database = RoomDB.getInstance(this);
         dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
 
@@ -55,33 +60,43 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.pager);
         weekDaysEn = getResources().getStringArray(R.array.weekdaysEn);
 
+        boolean isBacked = getIntent().getBooleanExtra("isBacked", false);
+        if(isBacked) {
+            int of = getIntent().getIntExtra("viewPagerOffset", 0);
+            viewPagerOffset = Integer.valueOf(of);
+        }
+
         now = new Date();
         // 端末の設定言語によって曜日の表示が異なるため英語で固定する
         DateFormatSymbols dfs = DateFormatSymbols.getInstance(Locale.ENGLISH);
         String nowDay = new SimpleDateFormat("E",dfs).format(now);
         defaultPageNum = Arrays.asList(weekDaysEn).indexOf(nowDay);
+        currentPageNum = defaultPageNum;
         pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.post(new Runnable() {
             @Override
             public void run() {
-                viewPager.setCurrentItem(defaultPageNum, false);
+                viewPager.setCurrentItem(
+                        viewPagerOffset != null ? viewPagerOffset.intValue() : defaultPageNum,
+                        false);
             }
         });
         viewPager.setPageTransformer(new ZoomOutPageTransformer());
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
-        pagerAdapter.notifyDataSetChanged();
-        Intent selfIntent = new Intent(this, MainActivity.class);
-        selfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        finish();
-        startActivity(selfIntent);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
+//        pagerAdapter.notifyDataSetChanged();
+//        viewPagerOffset = getIntent
+//        Intent selfIntent = new Intent(this, MainActivity.class);
+//        selfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        finish();
+//        startActivity(selfIntent);
+//    }
 
 
     @Override
@@ -106,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         switch (itemId) {
             case R.id.nav_option_add:
                 Intent intent = new Intent(this, AddClassActivity.class);
-                startActivityForResult(intent, 101);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -122,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull FragmentViewHolder holder, int position, @NonNull List<Object> payloads) {
             super.onBindViewHolder(holder, position, payloads);
             // MainActivity自体を再起動させる事でデータ更新が反映されない問題を解決
+            currentPageNum = holder.getAdapterPosition();
         }
 
         @NonNull

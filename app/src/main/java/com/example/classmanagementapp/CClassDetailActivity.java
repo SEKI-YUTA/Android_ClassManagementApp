@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,30 +22,22 @@ import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CClassDetailActivity extends AppCompatActivity {
     TextView tv_classTime,tv_subjectName, tv_teacherName, tv_roomName, tv_onlineLink,tv_remarkText;
     ImageButton imgBtn_delete;
     AlertDialog.Builder alertDialogBuilder;
     ActionBar actionbar;
     ImageButton customAppbar_goBack, imgBtn_linkCopy;
+    CClass ccLass;
+    int viewPagerOffset;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cclass_detail);
-
-        // アクションバーをカスタム
-        actionbar = getSupportActionBar();
-        actionbar.setDisplayShowTitleEnabled(false);
-        actionbar.setDisplayShowCustomEnabled(true);
-        actionbar.setCustomView(R.layout.custom_appbar1);
-        customAppbar_goBack = findViewById(R.id.customAppbar_goBack);
-        customAppbar_goBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        // ここまで
 
         tv_classTime = findViewById(R.id.tv_classTime);
         tv_subjectName = findViewById(R.id.tv_subjectName);
@@ -55,7 +48,24 @@ public class CClassDetailActivity extends AppCompatActivity {
         imgBtn_delete = findViewById(R.id.imgBtn_delete);
         imgBtn_linkCopy = findViewById(R.id.imgBtn_linkCopy);
 
-        CClass ccLass = (CClass) getIntent().getSerializableExtra(EnumConstantValues.ONE_CCLASS_KEY.getConstantString());
+        ccLass = (CClass) getIntent().getSerializableExtra(EnumConstantValues.ONE_CCLASS_KEY.getConstantString());
+
+        String[] weekDays = getResources().getStringArray(R.array.weekdays);
+        viewPagerOffset = Arrays.asList(weekDays).indexOf(ccLass.getWeekOfDay());
+
+        // アクションバーをカスタム
+        actionbar = getSupportActionBar();
+        actionbar.setDisplayShowTitleEnabled(false);
+        actionbar.setDisplayShowCustomEnabled(true);
+        actionbar.setCustomView(R.layout.custom_appbar1);
+        customAppbar_goBack = findViewById(R.id.customAppbar_goBack);
+        customAppbar_goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               backToMain();
+            }
+        });
+        // ここまで
 
         tv_classTime.setText(ccLass.getWeekOfDay() +"  " +  ccLass.getStartTime() + "~" + ccLass.getEndTime());
         tv_subjectName.setText(ccLass.getSubjectName());
@@ -82,9 +92,7 @@ public class CClassDetailActivity extends AppCompatActivity {
                         RoomDB database = RoomDB.getInstance(CClassDetailActivity.this);
                         database.mainDAO().delete(ccLass);
                         Toast.makeText(CClassDetailActivity.this, "削除しました。", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent();
-                        setResult(Activity.RESULT_OK, intent);
-                        finish();
+                        backToMain();
                     }
                 });
                 alertDialogBuilder.create();
@@ -97,8 +105,17 @@ public class CClassDetailActivity extends AppCompatActivity {
         tv_onlineLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(tv_onlineLink.getText().toString()));
-                startActivity(browserIntent);
+                String url = tv_onlineLink.getText().toString();
+                url = url.replace(" ", "");
+                url = url.replace("　", "");
+                Log.d("MyLog", url);
+                Pattern pattern = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+                Matcher m = pattern.matcher(url);
+                if(m.find()) {
+                    Log.d("MyLog", "valid url");
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                }
             }
         });
 
@@ -116,5 +133,19 @@ public class CClassDetailActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        backToMain();
+    }
+
+    private void backToMain() {
+        Intent intent = new Intent(CClassDetailActivity.this, MainActivity.class);
+        intent.putExtra("viewPagerOffset", viewPagerOffset);
+        intent.putExtra("isBacked", true);
+        startActivity(intent);
+        finish();
     }
 }

@@ -1,7 +1,9 @@
 package com.example.classmanagementapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +19,8 @@ import androidx.fragment.app.DialogFragment;
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
 
+import java.util.Arrays;
+
 public class AddClassActivity extends AppCompatActivity {
     ActionBar actionBar;
     EditText edit_subjectName, edit_teacherName, edit_roomName,
@@ -24,13 +28,19 @@ public class AddClassActivity extends AppCompatActivity {
     Button btn_choiceStartTime, btn_choiceEndTime, btn_classAdd;
     Spinner spinner_weekDay;
     RoomDB database;
+    int viewPagerPageNum;
+    private String selectedWeekDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_class);
 
-
+        try {
+            viewPagerPageNum = getIntent().getIntExtra("viewPagerPageNum", 0);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         // アクションバーに戻るボタンを追加
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
@@ -85,7 +95,7 @@ public class AddClassActivity extends AppCompatActivity {
         findViewById(R.id.customAppbar_goBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                backToMain(viewPagerPageNum);
             }
         });
         // ここまで
@@ -111,18 +121,24 @@ public class AddClassActivity extends AppCompatActivity {
                 CClass newClass = new CClass(subjectName, teacherName, roomName, weekOfDay, onlineLink,
                         remarkText, startTime, endTime);
                 database.mainDAO().insert(newClass);
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
+                String[] weekDays = getResources().getStringArray(R.array.weekdays);
+                Log.d("MyLog", "weekOfDay" + newClass.getWeekOfDay());
+                int of = Arrays.asList(weekDays).indexOf(newClass.getWeekOfDay());
+                backToMain(of);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        backToMain(viewPagerPageNum);
     }
 
     // 曜日選択のスピナーを選択したときの処理
     private final AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            String[] weekDays = getResources().getStringArray(R.array.weekdays);
         }
 
         @Override
@@ -131,4 +147,12 @@ public class AddClassActivity extends AppCompatActivity {
         }
     };
     // ここまで
+
+    private void backToMain(int of) {
+        Intent intent = new Intent(AddClassActivity.this, MainActivity.class);
+        intent.putExtra("viewPagerOffset", of);
+        intent.putExtra("isBacked", true);
+        startActivity(intent);
+        finish();
+    }
 }
