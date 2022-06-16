@@ -130,6 +130,7 @@ public class CClassDetailActivity extends AppCompatActivity {
         imgBtn_linkCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(ccLass.getOnlineLink() == "") return;
                 // 授業リンクをコピーする処理
                 ClipboardManager clipboardManager = (ClipboardManager) CClassDetailActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
                 if(clipboardManager == null) {
