@@ -24,10 +24,10 @@ import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Listeners.OnClassSelectedListener;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
+import com.example.classmanagementapp.Utils.TimeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -58,30 +58,26 @@ public class DayClassPageFragment extends Fragment {
         for(int i = 0; i < dataAll.size(); i++) {
             if(dataAll.get(i).getWeekOfDay().equals(weekOfDay)) {
                 filteredData.add(dataAll.get(i));
-                Log.d("MyLog", weekOfDay);
             }
         }
 
         // 開始時間が早い順に並び変える処理
+        Log.d("MyLog" , "Sort");
         for(int i = 0; i < filteredData.size() - 1; i++) {
+            Log.d("MyLog", "sort processing");
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-            Date date1 = new Date();
-            Date date2 = new Date();
-            date1.setHours(Integer.parseInt(filteredData.get(i).getStartTime().split(":")[0]));
-            date1.setMinutes(Integer.parseInt(filteredData.get(i).getStartTime().split(":")[1]));
-            date2.setHours(Integer.parseInt(filteredData.get(i + 1).getStartTime().split(":")[0]));
-            date2.setMinutes(Integer.parseInt(filteredData.get(i + 1).getStartTime().split(":")[1]));
+            Date date1 = TimeUtil.convertDateFromHM(filteredData.get(i).getStartTime());
+            Date date2 = TimeUtil.convertDateFromHM(filteredData.get(i + 1).getStartTime());
+            Log.d("Fragment", format.format(date1));
+            Log.d("Fragment", format.format(date2));
             if(date1.after(date2)) {
                 CClass tmp = filteredData.get(i);
-                Log.d("MyLog", format.format(date1));
-                Log.d("MyLog", format.format(date2));
+
                 filteredData.set(i, filteredData.get(i + 1));
                 filteredData.set(i + 1, tmp);
             }
         }
         // ここまで
-
-
 
         adapter = new CClassAdapter(getContext(), filteredData, listener);
 
@@ -124,8 +120,7 @@ public class DayClassPageFragment extends Fragment {
                             }
                             return true;
                         case R.id.context_delete:
-                            String[] weekDays = getResources().getStringArray(R.array.weekdays);
-                            int of = Arrays.asList(weekDays).indexOf(cClass.getWeekOfDay());
+                            int of = TimeUtil.getWeekDayIndexJa(cClass.getWeekOfDay(), getContext());
                             RoomDB database = RoomDB.getInstance(getContext());
                             database.mainDAO().delete(cClass);
                             Intent intent = new Intent(getContext(), MainActivity.class);

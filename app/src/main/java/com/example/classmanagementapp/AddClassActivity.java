@@ -19,6 +19,7 @@ import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
+import com.example.classmanagementapp.Utils.TimeUtil;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -73,7 +74,6 @@ public class AddClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // ここにタイムピッカーから取得した値をフォーマットしてから
-                // edit_startTimeに表示させる処理を書く
                 DialogFragment newFragment = new TimePick(edit_startTime);
                 newFragment.show(getSupportFragmentManager(), "timePicker");
             }
@@ -83,7 +83,6 @@ public class AddClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // ここにタイムピッカーから取得した値をフォーマットしてから
-                // edit_endTimeに表示させる処理を書く
                 DialogFragment newFragment = new TimePick(edit_endTime);
                 newFragment.show(getSupportFragmentManager(), "timePicker");
             }
@@ -104,10 +103,6 @@ public class AddClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean isTimeValid;
-                Date now = new Date();
-                Date startDateTime = new Date();
-                Date endDateTime = new Date();
-
                 // データベースに追加するための下処理と追加処理
                 String subjectName = edit_subjectName.getText().toString();
                 String teacherName = edit_teacherName.getText().toString();
@@ -118,15 +113,10 @@ public class AddClassActivity extends AppCompatActivity {
                 String startTime = edit_startTime.getText().toString();
                 String endTime = edit_endTime.getText().toString();
 
-                try {
-                    startDateTime.setHours(Integer.parseInt(startTime.split(":")[0]));
-                    startDateTime.setMinutes(Integer.parseInt(startTime.split(":")[1]));
-                    endDateTime.setHours(Integer.parseInt(endTime.split(":")[0]));
-                    endDateTime.setMinutes(Integer.parseInt(endTime.split(":")[1]));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(AddClassActivity.this, "予期せぬエラーが発生しました。\nもう一度操作をしてください。", Toast.LENGTH_SHORT).show();
-                }
+                Date startDateTime = TimeUtil.convertDateFromHM(startTime);
+                Date endDateTime = TimeUtil.convertDateFromHM(endTime);
+
+
                 isTimeValid = endDateTime.after(startDateTime);
 
                 if (subjectName.equals("") || teacherName.equals("") || roomName.equals("") || weekOfDay.equals("")
@@ -141,9 +131,11 @@ public class AddClassActivity extends AppCompatActivity {
                 CClass newClass = new CClass(subjectName, teacherName, roomName, weekOfDay, onlineLink,
                         remarkText, startTime, endTime);
                 database.mainDAO().insert(newClass);
-                String[] weekDays = getResources().getStringArray(R.array.weekdays);
-                int of = Arrays.asList(weekDays).indexOf(newClass.getWeekOfDay());
+                // メイン画面に戻る際に追加したクラスが何ページ目にあるかを計算してそのページに戻っている
+                int of = TimeUtil.getWeekDayIndexJa(newClass.getWeekOfDay(), AddClassActivity.this);
+                // メイン画面に戻る関数
                 backToMain(of);
+                // ここまで
             }
         });
     }
@@ -167,8 +159,10 @@ public class AddClassActivity extends AppCompatActivity {
     };
     // ここまで
 
+    // int of 何ページ目に戻るかを指定
     private void backToMain(int of) {
         Intent intent = new Intent(AddClassActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(EnumConstantValues.VIEWPAGER_OFFSET.getConstantString(), of);
         intent.putExtra(EnumConstantValues.IS_BACKED.getConstantString(), true);
         startActivity(intent);

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.classmanagementapp.Listeners.OnClassSelectedListener;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.R;
+import com.example.classmanagementapp.Utils.TimeUtil;
 import com.example.classmanagementapp.ViewHolders.CClassViewHolder;
 
 import java.time.DayOfWeek;
@@ -66,18 +67,14 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 CClass cClass = classList.get(holder.getAdapterPosition());
-                String[] weekDays = context.getResources().getStringArray(R.array.weekdays);
                 List<DayOfWeek> oneWeek = new ArrayList<>();
                 oneWeek.addAll(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
-                int dayIndex = Arrays.asList(weekDays).indexOf(cClass.getWeekOfDay());
+                int dayIndex = TimeUtil.getWeekDayIndexJa(cClass.getWeekOfDay(), context);
                 Date now = new Date();
                 Date nextDate;
-//                Log.d("MyLog", String.valueOf(now.getYear()));
-//                Log.d("MyLog", String.valueOf(now.getMonth()));
-//                Log.d("MyLog", String.valueOf(now.getDate()));
                 LocalDate d = LocalDate.of(1900 + now.getYear(), now.getMonth() + 1, now.getDate()).with(TemporalAdjusters.next(oneWeek.get(dayIndex)));
                 Log.d("MyLog", d.toString());
-                nextDate =Date.from(d.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                nextDate = Date.from(d.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 if(b) {
                     // アラームをオンにする処理
                 } else {

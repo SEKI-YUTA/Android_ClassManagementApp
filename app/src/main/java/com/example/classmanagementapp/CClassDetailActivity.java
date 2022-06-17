@@ -21,6 +21,7 @@ import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
+import com.example.classmanagementapp.Utils.TimeUtil;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -65,8 +66,7 @@ public class CClassDetailActivity extends AppCompatActivity {
         }
         // ここまで
 
-        String[] weekDays = getResources().getStringArray(R.array.weekdays);
-        viewPagerOffset = Arrays.asList(weekDays).indexOf(ccLass.getWeekOfDay());
+        viewPagerOffset = TimeUtil.getWeekDayIndexJa(ccLass.getWeekOfDay(), this);
 
         // アクションバーをカスタム
         actionbar = getSupportActionBar();
@@ -152,6 +152,7 @@ public class CClassDetailActivity extends AppCompatActivity {
 
     private void backToMain() {
         Intent intent = new Intent(CClassDetailActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(EnumConstantValues.VIEWPAGER_OFFSET.getConstantString(), viewPagerOffset);
         intent.putExtra(EnumConstantValues.IS_BACKED.getConstantString(), true);
         startActivity(intent);

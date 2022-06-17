@@ -21,6 +21,7 @@ import com.example.classmanagementapp.Transformer.ZoomOutPageTransformer;
 import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 import com.example.classmanagementapp.Utils.EnumWeekDays;
+import com.example.classmanagementapp.Utils.TimeUtil;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
         viewPager = findViewById(R.id.pager);
         actionBar = getSupportActionBar();
-        weekDaysEn = getResources().getStringArray(R.array.weekdaysEn);
 
         // アクションバーのタイトルを消す処理
         AppBarSetUP.hideTitle(actionBar);
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         // 端末の設定言語によって曜日の表示が異なるため英語で固定する
         DateFormatSymbols dfs = DateFormatSymbols.getInstance(Locale.ENGLISH);
         String nowDay = new SimpleDateFormat("E",dfs).format(now);
-        defaultPageNum = Arrays.asList(weekDaysEn).indexOf(nowDay);
-        currentPageNum = defaultPageNum;
+        defaultPageNum = TimeUtil.getWeekDayIndexEn(nowDay, this);
+//        currentPageNum = defaultPageNum;
         pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.post(new Runnable() {
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull FragmentViewHolder holder, int position, @NonNull List<Object> payloads) {
             super.onBindViewHolder(holder, position, payloads);
             // MainActivity自体を再起動させる事でデータ更新が反映されない問題を解決
-            currentPageNum = holder.getAdapterPosition();
+//            currentPageNum = holder.getAdapterPosition();
         }
 
         @NonNull

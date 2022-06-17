@@ -18,8 +18,8 @@ import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
+import com.example.classmanagementapp.Utils.TimeUtil;
 
-import java.util.Arrays;
 import java.util.Date;
 
 public class EditClassActivity extends AppCompatActivity {
@@ -103,8 +103,6 @@ public class EditClassActivity extends AppCompatActivity {
             public void onClick(View view) {
                 boolean isTimeValid;
                 Date now = new Date();
-                Date startDateTime = new Date();
-                Date endDateTime = new Date();
 
                 // データベースに追加するための下処理と追加処理
                 String subjectName = edit_subjectName.getText().toString();
@@ -116,15 +114,9 @@ public class EditClassActivity extends AppCompatActivity {
                 String startTime = edit_startTime.getText().toString();
                 String endTime = edit_endTime.getText().toString();
 
-                try {
-                    startDateTime.setHours(Integer.parseInt(startTime.split(":")[0]));
-                    startDateTime.setMinutes(Integer.parseInt(startTime.split(":")[1]));
-                    endDateTime.setHours(Integer.parseInt(endTime.split(":")[0]));
-                    endDateTime.setMinutes(Integer.parseInt(endTime.split(":")[1]));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(EditClassActivity.this, "予期せぬエラーが発生しました。\nもう一度操作をしてください。", Toast.LENGTH_SHORT).show();
-                }
+                Date startDateTime = TimeUtil.convertDateFromHM(startTime);
+                Date endDateTime = TimeUtil.convertDateFromHM(endTime);
+
                 isTimeValid = endDateTime.after(startDateTime);
 
                 if (subjectName.equals("") || teacherName.equals("") || roomName.equals("") || weekOfDay.equals("")
@@ -142,9 +134,10 @@ public class EditClassActivity extends AppCompatActivity {
                 database.mainDAO().update(currentCClass.getID(), subjectName, teacherName, roomName,
                         weekOfDay, onlineLink, remarkText, startTime, endTime
                         );
-                String[] weekDays = getResources().getStringArray(R.array.weekdays);
-                int of = Arrays.asList(weekDays).indexOf(newClass.getWeekOfDay());
+
+                int of = TimeUtil.getWeekDayIndexJa(newClass.getWeekOfDay(), EditClassActivity.this);
                 backToMain(of);
+                // ここまで
             }
         });
     }
@@ -178,6 +171,7 @@ public class EditClassActivity extends AppCompatActivity {
         }
     };
     // ここまで
+    // int of 何ページ目に戻るかを指定
     private void backToMain(int of) {
         Intent intent = new Intent(EditClassActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
