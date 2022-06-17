@@ -55,6 +55,13 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
                 listener.onClassSelected(cClass);
             }
         });
+        holder.classCard.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.onClassLongPressed(holder.classCard, classList.get(holder.getAdapterPosition()));
+                return true;
+            }
+        });
         holder.toggleAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
