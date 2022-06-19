@@ -2,6 +2,7 @@ package com.example.classmanagementapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,11 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private ActionBar actionBar;
     private FragmentStateAdapter pagerAdapter;
-    private int currentPageNum;
     private int defaultPageNum;
     private Integer viewPagerOffset;
     public SimpleDateFormat dateFormat = new SimpleDateFormat("MM月dd日");
-    public String[] weekDaysEn;
     public Date now;
 
 
@@ -115,9 +114,32 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, AddClassActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.nav_option_demo:
+                addDemoDataAndRestartSelf();
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void addDemoDataAndRestartSelf() {
+        Date now = new Date();
+        DateFormatSymbols dfs = DateFormatSymbols.getInstance(Locale.JAPANESE);
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        String weekDay = new SimpleDateFormat("E", dfs).format(now) + "曜日";
+        Date startTime = new Date(now.getTime() + 60 * 1000);
+        Date endTime = new Date(now.getTime() + 300 * 1000);
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        RoomDB database = RoomDB.getInstance(this);
+        CClass demoData = new CClass("aaaa", "bbb", "111",
+                new SimpleDateFormat("E", dfs).format(now) + "曜日", "", "", format.format(startTime), format.format(endTime));
+        database.mainDAO().insert(demoData);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(EnumConstantValues.VIEWPAGER_OFFSET.getConstantString(), TimeUtil.getWeekDayIndexJa(weekDay, this));
+        intent.putExtra(EnumConstantValues.IS_BACKED.getConstantString(), true);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
