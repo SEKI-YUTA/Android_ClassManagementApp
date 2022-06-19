@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">ClassManagementApp</string>
+    <string name="open_drawer">Open Drawer Menu</string>
+    <string name="close_drawer">Close Drawer Menu</string>
     <string name="url_validation">\b(https?|ftp|file)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]</string>
     <string-array name="weekdays">
         <item>月曜日</item>

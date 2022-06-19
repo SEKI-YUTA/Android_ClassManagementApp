@@ -6,10 +6,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -23,6 +27,7 @@ import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 import com.example.classmanagementapp.Utils.EnumWeekDays;
 import com.example.classmanagementapp.Utils.TimeUtil;
+import com.google.android.material.navigation.NavigationView;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -42,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private Integer viewPagerOffset;
     public SimpleDateFormat dateFormat = new SimpleDateFormat("MM月dd日");
     public Date now;
+    
+    // ここからドロワーメニュー関係
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle drawerToggle;
+    // ここまで
 
 
 
@@ -50,6 +61,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        // ここからドロワーメニュー関係
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.drawer_openWebClass:
+                        Toast.makeText(MainActivity.this, "Open WebClass", Toast.LENGTH_SHORT).show();
+                        Log.d("MyLog", "Open WebClass");
+                        return true;
+                    case R.id.drawer_aboutThisApp:
+                        Toast.makeText(MainActivity.this, "About This App", Toast.LENGTH_SHORT).show();
+                        Log.d("MyLog", "About This App");
+                        Intent intent = new Intent(MainActivity.this, AboutThisAppActivity.class);
+                        startActivity(intent);
+                        return true;
+                    default:
+                        Log.d("MyLog" , "No matched ID");
+                        return false;
+                }
+            }
+        });
+        // ここまで
 
         database = RoomDB.getInstance(this);
         dataAll = (ArrayList<CClass>) database.mainDAO().getAll();
@@ -92,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (viewPager.getCurrentItem() == 0) {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (viewPager.getCurrentItem() == 0) {
             super.onBackPressed();
         } else {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
@@ -108,16 +150,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.nav_option_add:
-                Intent intent = new Intent(this, AddClassActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.nav_option_demo:
-                addDemoDataAndRestartSelf();
-            default:
-                return super.onOptionsItemSelected(item);
+        if(drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        } else {
+            switch (item.getItemId()) {
+                case R.id.nav_option_add:
+                    Intent intent = new Intent(this, AddClassActivity.class);
+                    startActivity(intent);
+                    return true;
+                case R.id.nav_option_demo:
+                    addDemoDataAndRestartSelf();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
     }
 
