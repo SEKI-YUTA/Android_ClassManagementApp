@@ -1,5 +1,7 @@
 package com.example.classmanagementapp.ViewHolders;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Switch;
@@ -15,7 +17,8 @@ public class CClassViewHolder extends RecyclerView.ViewHolder{
     public TextView tv_startAndEndTime, tv_subjectName, tv_teacherName, tv_roomName;
     public CardView classCard;
     public Switch toggleAlarm;
-    public ImageButton imgBtn_linkCopy;
+    public AlarmManager alarmManager;
+    public PendingIntent pendingIntent;
     public CClassViewHolder(@NonNull View itemView) {
         super(itemView);
         tv_startAndEndTime = itemView.findViewById(R.id.tv_startAndEndTime);
