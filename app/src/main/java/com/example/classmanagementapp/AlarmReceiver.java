@@ -11,16 +11,20 @@ import android.widget.Switch;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.classmanagementapp.Models.CClass;
+
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Switch toggleAlarm;
         PendingIntent pendingIntent;
         Context appContext = context.getApplicationContext();
         String title = intent.getStringExtra("classTitle");
         String content = intent.getStringExtra("classTime");
-        toggleAlarm = (Switch) intent.getSerializableExtra("toggleAlarm");
+        String channel_ID = intent.getStringExtra("channelID");
+
         Log.d("MyLog", "onReceive");
+        Log.d("MyLog", title);
+        Log.d("MyLgo", channel_ID);
         Intent i = new Intent(appContext, DestinationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         if(Build.VERSION.SDK_INT >= 31) {
@@ -29,7 +33,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             pendingIntent = PendingIntent.getActivity(appContext, 0, i, 0);
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, "classAlarm")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, channel_ID)
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setContentTitle(title)
                 .setContentText(content)

@@ -50,18 +50,7 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
         this.listener = listener;
     }
 
-    private void createNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "simpleAlarmChannel";
-            String description = "This text is channel description";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("classAlarm", name, importance);
-            channel.setDescription(description);
 
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 
     @NonNull
     @Override
@@ -78,7 +67,7 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
         holder.tv_startAndEndTime.setText(cClass.getStartTime() + "~" + cClass.getEndTime() + " " + cClass.getWeekOfDay());
         holder.toggleAlarm.setChecked(cClass.isActive());
 
-        createNotificationChannel();
+        createNotificationChannel(String.format("%S%S%S%S", cClass.getID(), cClass.getSubjectName(), cClass.getStartTime(), cClass.getEndTime()));
 
         holder.classCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +109,8 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
                     Intent intent = new Intent(appContext, AlarmReceiver.class);
                     intent.putExtra("classTitle", cClass.getSubjectName());
                     intent.putExtra("classTime", String.format("%S~%S", cClass.getStartTime(), cClass.getEndTime()));
-                    Log.d("toggleAlarm", String.valueOf(holder.toggleAlarm.getId()));
+                    intent.putExtra("channelID", String.format("%S%S%S%S", cClass.getID(), cClass.getSubjectName(), cClass.getStartTime(), cClass.getEndTime()));
+
 
                     if(Build.VERSION.SDK_INT >= 31) {
                         holder.pendingIntent = PendingIntent.getBroadcast(appContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
@@ -158,6 +148,19 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
             }
         });
         
+    }
+
+    private void createNotificationChannel(String channelID) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "simpleAlarmChannel";
+            String description = "This text is channel description";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(channelID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override
