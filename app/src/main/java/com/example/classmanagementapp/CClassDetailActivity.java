@@ -36,6 +36,7 @@ public class CClassDetailActivity extends AppCompatActivity {
     private CClass ccLass;
     private int viewPagerOffset;
     private boolean isURLValid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

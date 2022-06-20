@@ -37,8 +37,19 @@ public class CClass implements Serializable {
     @ColumnInfo(name = "endTime")
     String endTime;
 
+    @ColumnInfo(name = "isActive")
+    boolean isActive;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     public CClass(String subjectName, String teacherName, String roomName, String weekOfDay,
-                  String onlineLink, String remarkText, String startTime, String endTime) {
+                  String onlineLink, String remarkText, String startTime, String endTime, boolean isActive) {
         this.subjectName = subjectName;
         this.teacherName = teacherName;
         this.roomName = roomName;
@@ -47,6 +58,7 @@ public class CClass implements Serializable {
         this.remarkText = remarkText;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.isActive = isActive;
     }
 
     public int getID() {

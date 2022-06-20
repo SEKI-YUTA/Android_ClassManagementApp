@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.classmanagementapp.AlarmReceiver;
+import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Listeners.OnClassSelectedListener;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.R;
@@ -74,6 +76,7 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
         holder.tv_teacherName.setText(cClass.getTeacherName());
         holder.tv_roomName.setText(cClass.getRoomName());
         holder.tv_startAndEndTime.setText(cClass.getStartTime() + "~" + cClass.getEndTime() + " " + cClass.getWeekOfDay());
+        holder.toggleAlarm.setChecked(cClass.isActive());
 
         createNotificationChannel();
 
@@ -91,9 +94,11 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
             }
         });
         holder.toggleAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 long triggerTime;
+                RoomDB database = RoomDB.getInstance(context);
                 Context appContext = context.getApplicationContext();
                 CClass cClass = classList.get(holder.getAdapterPosition());
 
@@ -109,11 +114,6 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
                     Log.d("MyLog", "来週の" + cClass.getStartTime() + "にアラームをセット");
                     triggerTime = startTime.getTime() + 60 * 60 * 24 * 7 * 1000;
                 }
-                int dayIndex = TimeUtil.getWeekDayIndexJa(cClass.getWeekOfDay(), context);
-                Date nextDate;
-//                LocalDate d = LocalDate.of(1900 + now.getYear(), now.getMonth() + 1, now.getDate()).with(TemporalAdjusters.next(oneWeek.get(dayIndex)));
-//                Log.d("MyLog", d.toString());
-//                nextDate = Date.from(d.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 if(b) {
                     // アラームをオンにする処理
                     holder.alarmManager = (AlarmManager) appContext.getSystemService(ALARM_SERVICE);
@@ -129,7 +129,8 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
                     }
 
                     holder.alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, triggerTime,
-                            AlarmManager.INTERVAL_DAY,holder.pendingIntent);
+                            60 * 60 * 24 * 7 * 1000 ,holder.pendingIntent);
+                    database.mainDAO().updateIsActiveState(cClass.getID(), true);
                     // 一週間おきにアラームを鳴らす
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 //                60 * 60 * 24 * 7 * 1000, pendingIntent);
@@ -149,6 +150,7 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
                     }
 
                     holder.alarmManager.cancel(holder.pendingIntent);
+                    database.mainDAO().updateIsActiveState(cClass.getID(), false);
                     Toast.makeText(context, "The alarm canceled", Toast.LENGTH_SHORT).show();
                 }
                 String message = String.format("%S %S%S%S",  cClass.getWeekOfDay(),holder.tv_startAndEndTime.getText().toString(), "の授業アラームを", b ? "ONにしました" : "OFFにしました");

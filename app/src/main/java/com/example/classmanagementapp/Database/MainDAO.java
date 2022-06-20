@@ -23,6 +23,9 @@ public interface MainDAO {
     void update(int id, String subjectName, String teacherName, String roomName,
                 String weekOfDay, String onlineLink, String remarkText, String startTime, String endTime);
 
+    @Query("UPDATE classes SET isActive = :newState WHERE ID = :id")
+    void updateIsActiveState(int id, boolean newState);
+
     @Delete
     void delete(CClass cClass);
 }

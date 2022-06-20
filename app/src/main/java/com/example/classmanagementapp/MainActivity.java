@@ -2,6 +2,7 @@ package com.example.classmanagementapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("getTime", String.valueOf(new Date().getTime()));
+        Log.d("systemClock", String.valueOf(SystemClock.elapsedRealtime()));
         
         // ここからドロワーメニュー関係
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -111,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         DateFormatSymbols dfs = DateFormatSymbols.getInstance(Locale.ENGLISH);
         String nowDay = new SimpleDateFormat("E",dfs).format(now);
         defaultPageNum = TimeUtil.getWeekDayIndexEn(nowDay, this);
-//        currentPageNum = defaultPageNum;
         pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.post(new Runnable() {
@@ -124,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         });
         // ここまで
 
-        // ページ移動時のアニメーション
+        // ページ移動時のアニメーションを設定
         viewPager.setPageTransformer(new ZoomOutPageTransformer());
 
     }
@@ -167,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // デモようなので、不必要になったらけしてOK
     private void addDemoDataAndRestartSelf() {
         Date now = new Date();
         DateFormatSymbols dfs = DateFormatSymbols.getInstance(Locale.JAPANESE);
@@ -177,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         RoomDB database = RoomDB.getInstance(this);
         CClass demoData = new CClass("aaaa", "bbb", "111",
-                new SimpleDateFormat("E", dfs).format(now) + "曜日", "", "", format.format(startTime), format.format(endTime));
+                new SimpleDateFormat("E", dfs).format(now) + "曜日", "", "", format.format(startTime), format.format(endTime), false);
         database.mainDAO().insert(demoData);
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -197,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull FragmentViewHolder holder, int position, @NonNull List<Object> payloads) {
             super.onBindViewHolder(holder, position, payloads);
             // MainActivity自体を再起動させる事でデータ更新が反映されない問題を解決
-//            currentPageNum = holder.getAdapterPosition();
         }
 
         @NonNull

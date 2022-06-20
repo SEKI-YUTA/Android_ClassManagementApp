@@ -129,7 +129,7 @@ public class AddClassActivity extends AppCompatActivity {
                     return;
                 }
                 CClass newClass = new CClass(subjectName, teacherName, roomName, weekOfDay, onlineLink,
-                        remarkText, startTime, endTime);
+                        remarkText, startTime, endTime, false);
                 database.mainDAO().insert(newClass);
                 // メイン画面に戻る際に追加したクラスが何ページ目にあるかを計算してそのページに戻っている
                 int of = TimeUtil.getWeekDayIndexJa(newClass.getWeekOfDay(), AddClassActivity.this);

@@ -129,7 +129,7 @@ public class EditClassActivity extends AppCompatActivity {
                     return;
                 }
                 CClass newClass = new CClass(subjectName, teacherName, roomName, weekOfDay, onlineLink,
-                        remarkText, startTime, endTime);
+                        remarkText, startTime, endTime,false);
 //                database.mainDAO().insert(newClass);
                 database.mainDAO().update(currentCClass.getID(), subjectName, teacherName, roomName,
                         weekOfDay, onlineLink, remarkText, startTime, endTime
