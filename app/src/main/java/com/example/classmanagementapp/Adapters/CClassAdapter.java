@@ -16,12 +16,11 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.classmanagementapp.AlarmReceiver;
+import com.example.classmanagementapp.Receivers.AlarmReceiver;
 import com.example.classmanagementapp.Database.RoomDB;
 import com.example.classmanagementapp.Listeners.OnClassSelectedListener;
 import com.example.classmanagementapp.Models.CClass;
@@ -29,11 +28,7 @@ import com.example.classmanagementapp.R;
 import com.example.classmanagementapp.Utils.TimeUtil;
 import com.example.classmanagementapp.ViewHolders.CClassViewHolder;
 
-import java.io.Serializable;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;

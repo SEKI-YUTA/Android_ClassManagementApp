@@ -1,4 +1,4 @@
-package com.example.classmanagementapp;
+package com.example.classmanagementapp.Receivers;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -6,12 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Switch;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.example.classmanagementapp.Models.CClass;
+import com.example.classmanagementapp.DestinationActivity;
+import com.example.classmanagementapp.R;
 
 public class AlarmReceiver extends BroadcastReceiver {
     @Override

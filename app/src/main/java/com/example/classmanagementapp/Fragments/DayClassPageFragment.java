@@ -1,4 +1,4 @@
-package com.example.classmanagementapp;
+package com.example.classmanagementapp.Fragments;
 
 
 import android.content.Intent;
@@ -20,9 +20,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.classmanagementapp.Adapters.CClassAdapter;
+import com.example.classmanagementapp.CClassDetailActivity;
 import com.example.classmanagementapp.Database.RoomDB;
+import com.example.classmanagementapp.EditClassActivity;
 import com.example.classmanagementapp.Listeners.OnClassSelectedListener;
+import com.example.classmanagementapp.MainActivity;
 import com.example.classmanagementapp.Models.CClass;
+import com.example.classmanagementapp.R;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
 import com.example.classmanagementapp.Utils.TimeUtil;
 

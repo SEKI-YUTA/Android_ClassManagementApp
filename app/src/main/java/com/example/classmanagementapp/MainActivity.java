@@ -22,18 +22,17 @@ import androidx.viewpager2.adapter.FragmentViewHolder;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.classmanagementapp.Database.RoomDB;
+import com.example.classmanagementapp.Fragments.DayClassPageFragment;
 import com.example.classmanagementapp.Models.CClass;
 import com.example.classmanagementapp.Transformer.ZoomOutPageTransformer;
 import com.example.classmanagementapp.Utils.AppBarSetUP;
 import com.example.classmanagementapp.Utils.EnumConstantValues;
-import com.example.classmanagementapp.Utils.EnumWeekDays;
 import com.example.classmanagementapp.Utils.TimeUtil;
 import com.google.android.material.navigation.NavigationView;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -76,15 +75,18 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
                 switch (item.getItemId()) {
                     case R.id.drawer_openWebClass:
                         Toast.makeText(MainActivity.this, "Open WebClass", Toast.LENGTH_SHORT).show();
                         Log.d("MyLog", "Open WebClass");
+                        intent = new Intent(MainActivity.this, BrowserActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.drawer_aboutThisApp:
                         Toast.makeText(MainActivity.this, "About This App", Toast.LENGTH_SHORT).show();
                         Log.d("MyLog", "About This App");
-                        Intent intent = new Intent(MainActivity.this, AboutThisAppActivity.class);
+                        intent = new Intent(MainActivity.this, AboutThisAppActivity.class);
                         startActivity(intent);
                         return true;
                     default:
@@ -168,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     return super.onOptionsItemSelected(item);
             }
         }
+
     }
 
     // デモようなので、不必要になったらけしてOK
