@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class TimeUtil {
+    private static long prevRun;
     // String hm 11:11のような形式の文字列をDate型に変換
     public static Date convertDateFromHM(String hm) {
         Date emit = new Date();
@@ -32,6 +33,19 @@ public class TimeUtil {
         String[] weekDaysJa = context.getResources().getStringArray(R.array.weekdaysEn);
         int index = Arrays.asList(weekDaysJa).indexOf(weekDayEn);
         return index;
+    }
+
+    public static boolean runOnDoubleTap() {
+        Date date = new Date();
+        if(prevRun == 0) {
+            prevRun = date.getTime();
+            return false;
+        } else if(date.getTime() - prevRun < 2000) {
+            return true;
+        } else {
+            prevRun = date.getTime();
+            return false;
+        }
     }
 
 
