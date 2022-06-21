@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.ClientCertRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.classmanagementapp.Utils.TimeUtil;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -79,7 +81,7 @@ public class BrowserActivity extends AppCompatActivity {
             }
         });
 
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(myClient);
         webView.loadUrl("https://j29-plw.osaka-sandai.ac.jp/cas/login?service=https%3A%2F%2Fed24lb.osaka-sandai.ac.jp%2Fwebclass%2Flogin.php%3Fauth_mode%3DCAS");
 
         imgBtn_goHome.setOnClickListener(new View.OnClickListener() {
@@ -92,12 +94,21 @@ public class BrowserActivity extends AppCompatActivity {
         });
     }
 
+//    private class MyWebClient extends WebViewClient {
+//
+//    }
+
+    private final WebViewClient myClient = new WebViewClient() {
+    };
+
     @Override
     public void onBackPressed() {
         if(webView != null && webView.canGoBack()) {
             webView.goBack();
-        } else {
+        } else if(webView != null && !webView.canGoBack() && TimeUtil.runOnDoubleTap()) {
             super.onBackPressed();
+        } else {
+            Toast.makeText(this, "戻るには戻るボタンを２回タップしてください。", Toast.LENGTH_SHORT).show();
         }
     }
 }

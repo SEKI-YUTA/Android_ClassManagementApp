@@ -5,7 +5,7 @@
         android:title="追加"
         app:showAsAction="always"
         android:id="@+id/nav_option_add"
-        android:icon="@drawable/ic_add"/>
+        android:icon="@drawable/ic_add_class"/>
     <item
         android:title="デモ用"
         app:showAsAction="always"
