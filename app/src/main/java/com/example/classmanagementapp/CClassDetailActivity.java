@@ -51,6 +51,8 @@ public class CClassDetailActivity extends AppCompatActivity {
         imgBtn_delete = findViewById(R.id.imgBtn_delete);
         imgBtn_linkCopy = findViewById(R.id.imgBtn_linkCopy);
 
+        tv_classTime.setSelected(true);
+
         ccLass = (CClass) getIntent().getSerializableExtra(EnumConstantValues.ONE_CCLASS_KEY.getConstantString());
 
         // URLが正式な形かをチェック
