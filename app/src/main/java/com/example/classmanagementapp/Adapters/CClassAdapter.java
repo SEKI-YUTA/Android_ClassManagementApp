@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,6 +116,12 @@ public class CClassAdapter extends RecyclerView.Adapter<CClassViewHolder> {
 
                     holder.alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, triggerTime,
                             60 * 60 * 24 * 7 * 1000 ,holder.pendingIntent);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.toggleAlarm.setChecked(false);
+                        }
+                    }, triggerTime - new Date().getTime());
                     database.mainDAO().updateIsActiveState(cClass.getID(), true);
                     // 一週間おきにアラームを鳴らす
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),

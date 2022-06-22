@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,10 +32,14 @@ public class BrowserActivity extends AppCompatActivity {
     RelativeLayout btn_showTabList;
     EditText edit_userInput;
     WebView webView;
+    SharedPreferences preferences;
+    String startPage = "https://j29-plw.osaka-sandai.ac.jp/cas/login?service=https%3A%2F%2Fed24lb.osaka-sandai.ac.jp%2Fwebclass%2Flogin.php%3Fauth_mode%3DCAS";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
+
+        preferences = this.getApplicationContext().getSharedPreferences("Setting", MODE_PRIVATE);
 
         imgBtn_goHome = findViewById(R.id.imgBtn_goHome);
         imgBtn_addTab = findViewById(R.id.imgBtn_addTab);
@@ -71,6 +76,7 @@ public class BrowserActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if(view != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    webView.loadUrl(edit_userInput.getText().toString());
                     InputMethodManager im = (InputMethodManager) BrowserActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                     im.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
                     Log.d("MyLog", "searching");
@@ -82,7 +88,7 @@ public class BrowserActivity extends AppCompatActivity {
         });
 
         webView.setWebViewClient(myClient);
-        webView.loadUrl("https://j29-plw.osaka-sandai.ac.jp/cas/login?service=https%3A%2F%2Fed24lb.osaka-sandai.ac.jp%2Fwebclass%2Flogin.php%3Fauth_mode%3DCAS");
+        webView.loadUrl(startPage);
 
         imgBtn_goHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,11 +100,24 @@ public class BrowserActivity extends AppCompatActivity {
         });
     }
 
-//    private class MyWebClient extends WebViewClient {
-//
-//    }
 
     private final WebViewClient myClient = new WebViewClient() {
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            Log.d("MyLog", "pageFinished");
+            Log.d("MyLog", url);
+            String username = SecretItems.getUsername();
+            String password = SecretItems.getPassword();
+            if(url.equals(startPage)) {
+                Log.d("MyLog", "runJS");
+                webView.evaluateJavascript(String.format("document.getElementById(\"user\").value = '%S';",
+                        preferences.getString("webClassUsername", "")), null);
+                webView.evaluateJavascript(String.format("document.getElementById(\"password\").value = '%S';",
+                        preferences.getString("webClassPassword", "")), null);
+                webView.evaluateJavascript("document.querySelector(\"input.button_login\").click();", null);
+            }
+            super.onPageFinished(view, url);
+        }
     };
 
     @Override

@@ -83,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
                         intent = new Intent(MainActivity.this, BrowserActivity.class);
                         startActivity(intent);
                         return true;
+                    case R.id.drawer_setting:
+                        Toast.makeText(MainActivity.this, "Setting", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivity(intent);
+                        return true;
                     case R.id.drawer_aboutThisApp:
                         Toast.makeText(MainActivity.this, "About This App", Toast.LENGTH_SHORT).show();
                         Log.d("MyLog", "About This App");
