@@ -59,17 +59,27 @@
             />
         <LinearLayout
             android:layout_marginTop="6dp"
-            android:weightSum="5"
+            android:weightSum="6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-            <EditText
-                android:id="@+id/edit_password"
-                android:layout_weight="4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                />
+
+                <EditText
+                    android:id="@+id/edit_password"
+                    android:inputType="textPassword"
+                    android:layout_weight="4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    />
+<!--            <ImageButton-->
+<!--                android:id="@+id/btn_togglePassHide"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:src="@drawable/ic_visibility_off"/>-->
             <Button
                 android:id="@+id/btn_applyPassword"
                 android:layout_weight="1"

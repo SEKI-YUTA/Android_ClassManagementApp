@@ -102,13 +102,15 @@ public class BrowserActivity extends AppCompatActivity {
 
 
     private final WebViewClient myClient = new WebViewClient() {
+        boolean failed = false;
         @Override
         public void onPageFinished(WebView view, String url) {
             Log.d("MyLog", "pageFinished");
             Log.d("MyLog", url);
-            String username = SecretItems.getUsername();
-            String password = SecretItems.getPassword();
-            if(url.equals(startPage)) {
+            failed = TimeUtil.runOnDoubleTap() ? true : false;
+            String username = preferences.getString("webClassUsername", "");
+            String password = preferences.getString("webClassPassword", "");
+            if(url.equals(startPage) && !username.equals("") && !password.equals("") && !failed) {
                 Log.d("MyLog", preferences.getString("webClassUsername", ""));
                 Log.d("MyLog", preferences.getString("webClassPassword", ""));
                 webView.evaluateJavascript(String.format("document.getElementById(\"user\").value = '%s';",

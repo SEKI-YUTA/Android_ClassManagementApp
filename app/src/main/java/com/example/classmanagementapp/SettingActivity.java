@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 public class SettingActivity extends AppCompatActivity {
     EditText edit_username, edit_password;
@@ -26,6 +27,7 @@ public class SettingActivity extends AppCompatActivity {
         edit_password = findViewById(R.id.edit_password);
         btn_applyUsername = findViewById(R.id.btn_applyUsername);
         btn_applyPassword = findViewById(R.id.btn_applyPassword);
+
 
         edit_username.setText(defaultUsername);
         edit_password.setText(defaultPassword);
