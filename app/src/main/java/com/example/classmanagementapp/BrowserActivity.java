@@ -109,10 +109,11 @@ public class BrowserActivity extends AppCompatActivity {
             String username = SecretItems.getUsername();
             String password = SecretItems.getPassword();
             if(url.equals(startPage)) {
-                Log.d("MyLog", "runJS");
-                webView.evaluateJavascript(String.format("document.getElementById(\"user\").value = '%S';",
+                Log.d("MyLog", preferences.getString("webClassUsername", ""));
+                Log.d("MyLog", preferences.getString("webClassPassword", ""));
+                webView.evaluateJavascript(String.format("document.getElementById(\"user\").value = '%s';",
                         preferences.getString("webClassUsername", "")), null);
-                webView.evaluateJavascript(String.format("document.getElementById(\"password\").value = '%S';",
+                webView.evaluateJavascript(String.format("document.getElementById(\"password\").value = '%s';",
                         preferences.getString("webClassPassword", "")), null);
                 webView.evaluateJavascript("document.querySelector(\"input.button_login\").click();", null);
             }
