@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // デモようなので、不必要になったらけしてOK
+    // デモ用なので、不必要になったらけしてOK
     private void addDemoDataAndRestartSelf() {
         Date now = new Date();
         DateFormatSymbols dfs = DateFormatSymbols.getInstance(Locale.JAPANESE);
